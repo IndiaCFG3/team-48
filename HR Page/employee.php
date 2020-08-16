@@ -11,6 +11,29 @@ include("../HR Page/connection.php");
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	  <script>
+	   google.charts.load('current', {'packages': ['corechart']});
+		 // Draw the pie chart when Charts is loaded.
+		  google.charts.setOnLoadCallback(draw_my_chart);
+		  // Callback that draws the pie chart
+		  function draw_my_chart() {
+		  // Create the data table .
+		  var data = new google.visualization.DataTable();
+		  data.addColumn('string', 'Centre Name')
+		  data.addColumn('number', 'Performance Rating');
+		  for(var i=0;i<my_2d.length;i++)
+			data.addRow([my_2d[i][0], parseInt(my_2d[i][1])]);
+	  // above row adds the JavaScript two dimensional array data into required chart format
+		var options = {title:'Centre performance rating',
+				   width:600,
+				   height:500};
+
+		  // Instantiate and draw the chart
+		  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		  chart.draw(data, options);
+		  }
+	  </script>
 </head>
 
 <body id="page-top">
@@ -63,11 +86,6 @@ include("../HR Page/connection.php");
             <td><?php  echo $row['Total Employees']; ?></td>
             <td><?php  echo $row['leaves taken']; ?></td>
             <td><?php  echo $row['Performance Rating']; ?></td>
-
-            
-
-
-
           </tr>
           <?php
             } 
@@ -78,7 +96,24 @@ include("../HR Page/connection.php");
         ?>
                                 </tbody>
                             </table>
+							<?php
+								require "database1.php";
+
+								if($stmt = $connection->query("SELECT  CentreName, PerformanceRating FROM employee")){
+								$php_data_array = Array();  
+								while ($row = $stmt->fetch_row()) {   
+								   $php_data_array[] = $row; 
+								   }
+								}else{
+								echo $connection->error;
+								}
+								echo "<script>
+										var my_2d = ".json_encode($php_data_array)."
+								</script>";
+							?>
+								<div id="chart_div"></div>
                         </div>
+						<input type="button" onclick="printDiv('dataTable')" onclick="printDiv('piechart')" value="print / save / download" />
                     </div>
                 </div>
             </div>
