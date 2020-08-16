@@ -8,6 +8,36 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+
+		  // Load the Visualization API and the corechart package.
+		  google.charts.load('current', {packages: ['corechart', 'bar']});
+		  google.charts.setOnLoadCallback(drawChart);
+		  
+		  function drawChart() {
+
+			// Create the data table.
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Batch Code');
+			data.addColumn('number', 'Total Students');
+			data.addColumn('number', 'Training Complete');
+			data.addColumn('number', 'Fees Paid');
+			data.addColumn('number', 'Certified');
+			data.addColumn('number', 'PlacedStudents');
+			for(var i = 0; i < my_2d.length; i++)
+			data.addRow([my_2d[i][0], parseInt(my_2d[i][1]),parseInt(my_2d[i][2]),parseInt(my_2d[i][3]),parseInt(my_2d[i][4]),parseInt(my_2d[i][5])]);
+		   var options = {
+			  title: 'Student ratio',
+			  hAxis: {title: 'Batches',  titleTextStyle: {color: '#333'}},
+			  vAxis: {minValue: 0}
+			};
+
+			var chart = new google.charts.Bar(document.getElementById('chart_div'));
+			chart.draw(data, options);
+		   }
+
+	</script>
 </head>
 
 <body id="page-top">
@@ -60,6 +90,22 @@
                                     </tr>
                                 </tbody>
                             </table>
+							<?php
+								require "database1.php";
+								if($stmt = $connection->query("SELECT BatchCode, TotalStudents, TrainingComplete, FeesPaid, Certified, PlacedStudents FROM operations")){
+								$php_data_array = Array();  
+								while ($row = $stmt->fetch_row()) {   
+								   $php_data_array[] = $row; 
+								   }
+								}else{
+								echo $connection->error;
+								}
+								echo "<script>
+										var my_2d = ".json_encode($php_data_array)."
+								</script>";
+								?>
+							<br>
+							<div id="chart_div" style="width:800px; height: 400px"></div>
                         </div>
                         <input type="button" onclick="printDiv('dataTable')" value="print / save / download" />
                     </div>
