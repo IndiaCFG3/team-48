@@ -11,30 +11,32 @@
 	
 	
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
+	<script type="text/javascript">
 
-  function drawChart() {
+		  // Load the Visualization API and the corechart package.
+		  google.charts.load('current', {packages: ['corechart', 'bar']});
+		  google.charts.setOnLoadCallback(drawChart);
+		  
+		  function drawChart() {
 
-    var data = google.visualization.arrayToDataTable([
-      ['Task', 'Hours per Day'],
-      ['Work',     11],
-      ['Eat',      2],
-      ['Commute',  2],
-      ['Watch TV', 2],
-      ['Sleep',    7]
-    ]);
+			// Create the data table.
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Centre Name');
+			data.addColumn('number', 'Overall Score');
+			
+			for(var i = 0; i < my_2d.length; i++)
+			data.addRow([my_2d[i][0], parseInt(my_2d[i][1])]);
+		   var options = {
+			  title: 'Centre Scores',
+			  hAxis: {title: 'Centre Name',  titleTextStyle: {color: '#333'}},
+			  vAxis: {minValue: 0}
+			};
 
-    var options = {
-      title: 'My Daily Activities'
-    };
+			var chart = new google.charts.Bar(document.getElementById('chart_div'));
+			chart.draw(data, options);
+		   }
 
-    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-    chart.draw(data, options);
-  }
-</script>
+	</script>
 </head>
 
 <body id="page-top">
@@ -85,10 +87,24 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <div id="piechart" style="width: 900px; height: 500px;"></div>
+							<?php
+								require "database1.php";
+								if($stmt = $connection->query("SELECT CentreName, Score FROM audit")){
+								$php_data_array = Array();  
+								while ($row = $stmt->fetch_row()) {   
+								   $php_data_array[] = $row; 
+								   }
+								}else{
+								echo $connection->error;
+								}
+								echo "<script>
+										var my_2d = ".json_encode($php_data_array)."
+								</script>";
+							?>
+                            
 
                         </div>
+						<div id="chart_div" style="width: 900px; height: 500px;"></div>
                         <input type="button" onclick="printDiv('dataTable')" onclick="printDiv('piechart')" value="print / save / download" />
                     </div>
 
