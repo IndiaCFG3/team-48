@@ -1,5 +1,5 @@
 <?php
-include("../HR Page/connection.php");
+include("../HR/connection.php");
 //include("../t_audit_with_graph/database1.php");
 ?>
 <!DOCTYPE html>
