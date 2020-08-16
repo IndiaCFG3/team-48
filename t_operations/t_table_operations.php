@@ -1,3 +1,7 @@
+<?php
+include("../HR Page/connection.php");
+//include("../t_audit_with_graph/database1.php");
+?>
 <!DOCTYPE html>
 <html>
 
@@ -66,6 +70,10 @@
                         <div class="row">
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <?php
+                        $query = "SELECT * FROM operations";
+        $query_run = mysqli_query($con, $query);
+        ?>
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                     <tr>
@@ -79,15 +87,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a</td>
-                                        <td>a<br></td>
+                                <?php
+        if(mysqli_num_rows($query_run) > 0)        
+        {
+            while($row = mysqli_fetch_assoc($query_run))
+            {
+               ?>
+          <tr>
+            <td><?php  echo $row['BatchCode']; ?></td>
+            <td><?php  echo $row['TotalStudents']; ?></td>
+            <td><?php  echo $row['TrainingComplete']; ?></td>
+            <td><?php  echo $row['FeesPaid']; ?></td>
+            <td><?php  echo $row['Certified']; ?></td>
+            <td><?php  echo $row['PlacedStudents']; ?></td>
+            
 
-                                    </tr>
+
+          </tr>
+          <?php
+            } 
+        }
+        else {
+            echo "No Record Found";
+        }
+        ?>
                                 </tbody>
                             </table>
 							<?php
