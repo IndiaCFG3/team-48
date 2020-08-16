@@ -1,5 +1,5 @@
 <?php
-include("../HR Page/connection.php");
+include("../HR/connection.php");
 ?>
 <!DOCTYPE html>
 <html>
