@@ -99,7 +99,7 @@ include("../HR Page/connection.php");
 							<?php
 								require "database1.php";
 
-								if($stmt = $connection->query("SELECT  CentreName, PerformanceRating FROM employee")){
+								if($stmt = $connection->query("SELECT  CentreName, `Performance Rating` FROM employee")){
 								$php_data_array = Array();  
 								while ($row = $stmt->fetch_row()) {   
 								   $php_data_array[] = $row; 
@@ -126,5 +126,4 @@ include("../HR Page/connection.php");
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/theme.js"></script>
 </body>
-
 </html>
